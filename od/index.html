@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="or">
+<!-- 
+  ସଚେତନତା: SB Video Call Web App କୁ ଡାଉନଲୋଡ୍ କରିବା, ବିକ୍ରୟ କରିବା ଆଇନ ସମ୍ମତ ନୁହେଁ। 
+  ଏହି ପ୍ରକଳ୍ପଟି ମାନ୍ୟମାନ୍ୟ ଏବଂ ମୁକ୍ତ ଅଟେ ସେହିପାଇଁ କପି,ଚୋରୀ  କିମ୍ବା ବିକ୍ରୟ କରିବା ଲଜ୍ୟା କାମ। 
+  ଅଧିକାର ଲଙ୍ଘନ କରି ପୁନରୁତ୍ପାଦନ କିମ୍ବା ବିତରଣ କରିବା ଆଇନ ଅନୁଯାଇ ଅପରାଧ ଅଟେ | ଆଉ ଯଦି ବି ତମେ ଏହା କରୁଛ ତାହେଲେ ତୁମେ ଗୋଟେ ମୂର୍ଖ ଓ ଅଶିକ୍ଷିତ |
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ଏସ୍‌ବି ଭିଡିଓ କଲ୍ - ପିଅର୍ ଟୁ ପିଅର୍</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wdth,wght@88,100..900&display=swap" rel="stylesheet">
+    <style>
+        /* --- Enhanced Video Call UI --- */
+
+        /* Reset and Base Styles */
+        :root {
+            --background-dark: #1e1f22; /* Very dark grey */
+            --background-medium: #2b2d31; /* Medium dark grey (video backgrounds, controls bg) */
+            --background-light: #313338; /* Lighter dark grey (navbar, some controls) */
+            --accent-purple: #6c5ce7; /* Vibrant purple */
+            --accent-purple-hover: #8a7dfa;
+            --text-primary: #f2f3f5; /* Off-white */
+            --text-secondary: #b5bac1; /* Greyish */
+            --border-color: #404249;
+            --red-leave: #e74c3c; /* Red for leave/off state */
+            --red-leave-hover: #c0392b;
+            --green-on: #2ecc71; /* Green for 'on' state (optional) */
+            --control-icon-size: 18px;
+            --copy-icon-size: 16px;
+            --copy-feedback-color: var(--green-on);
+        }
+
+        body {
+            font: bold 16px/1.5 "Noto Sans Oriya", sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navbar (Top Bar Simulation) */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space between SB ID group and hidden video */
+            padding: 12px 25px;
+            background-color: var(--background-light);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .peer-id-container {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between ID and copy button */
+            flex-grow: 1; /* Allow it to take available space */
+            min-width: 0; /* Allow shrinking */
+        }
+
+        /* Peer ID Display (Top Bar Info) */
+        h3#show-peer {
+            margin: 0;
+            padding: 8px 12px; /* Slightly less padding */
+            border: 1px solid var(--border-color);
+            background-color: var(--background-medium);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 500;
+            text-align: left;
+            overflow-wrap: break-word;
+            /* Removed fixed width/height */
+            white-space: nowrap;      /* Prevent wrapping initially */
+            overflow: hidden;         /* Hide overflow */
+            text-overflow: ellipsis;  /* Add ellipsis */
+            max-width: 250px; /* Limit max width */
+            flex-shrink: 1; /* Allow shrinking if needed */
+        }
+
+        /* Copy Button */
+        #copy-peer-id {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        #copy-peer-id:hover {
+            background-color: var(--background-medium);
+            color: var(--text-primary);
+        }
+
+        #copy-peer-id svg {
+            width: var(--copy-icon-size);
+            height: var(--copy-icon-size);
+            fill: currentColor;
+        }
+
+        #copy-peer-id.copied svg {
+             fill: var(--copy-feedback-color); /* Green check */
+        }
+
+
+        /* Local Video Container (Hidden in Navbar flow, positioned absolutely later) */
+        .navbar .video1 {
+            width: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            background-color: transparent;
+            flex-shrink: 0; /* Don't let it shrink */
+        }
+
+        /* Container FOR the Local Video (Picture-in-Picture) */
+        #ourVideo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 160px;
+            height: 120px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-medium);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease; /* For camera off fade */
+        }
+         /* Style for when camera is off */
+        #ourVideo.camera-off video {
+            opacity: 0; /* Hide the video feed */
+        }
+        #ourVideo.camera-off::before { /* Show icon when camera off */
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--text-secondary); /* Icon color */
+            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A.5.5 0 0 0 15 12.197V3.803a.5.5 0 0 0-.407-.498l-3.11 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365z"/><path d="M2.41 1.033a.5.5 0 0 0-.683-.066L.379 2.68A.5.5 0 0 0 .173 3H.5a.5.5 0 0 0 .5.5v7a.5.5 0 0 0 .5.5h6.472L11.59 15.4a.5.5 0 0 0 .825-.37l.02-.002.442-1.106a.5.5 0 0 0-.066-.683L2.41 1.033z"/></svg>');
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            opacity: 0.7;
+        }
+
+        /* Local Video Element Styling (added by JS) */
+        .ourvideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+            border-radius: 0;
+            transform: scaleX(-1); /* Mirror effect */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Main Content Section */
+        .section1 {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            position: relative; /* Needed for absolute positioning of #ourVideo */
+        }
+
+        /* Remote Video Container */
+        #remoteVideo {
+            width: 100%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+            background-color: var(--background-medium);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin: 0;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Remote Video Element Styling (added by JS) */
+        #remoteVideo .video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 0;
+            margin: 0;
+        }
+
+        /* Controls Area (Bottom Bar) */
+        .controls { /* Renamed .btn to .controls for clarity */
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px 25px;
+            background-color: var(--background-light); /* Match top bar */
+            margin: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Input Field Styling */
+        .controls input#peerID {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9em;
+            background-color: var(--background-medium); /* Darker input bg */
+            color: var(--text-primary);
+            flex-grow: 1; /* Allow input to grow */
+            max-width: 250px; /* Limit input width */
+            height: auto;
+            margin: 0;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+
+        .controls input#peerID::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .controls input#peerID:focus {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+        }
+
+        /* General Button Styling */
+        .controls button {
+            padding: 10px 15px; /* Slightly less horizontal padding for icon buttons */
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            height: auto;
+            margin: 0;
+            transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease, color 0.2s ease;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+            line-height: 1; /* Prevent extra space from line height */
+        }
+
+        .controls button svg {
+            width: var(--control-icon-size);
+            height: var(--control-icon-size);
+            fill: currentColor;
+        }
+
+        .controls button:hover {
+             transform: translateY(-1px);
+        }
+        .controls button:active {
+             transform: translateY(0);
+        }
+
+        /* Call Button */
+        #call-peer {
+            background-color: var(--accent-purple);
+        }
+        #call-peer:hover {
+            background-color: var(--accent-purple-hover);
+        }
+
+        /* Media Control Buttons (Camera, Mic) */
+        #toggle-camera, #toggle-mic {
+            background-color: var(--background-medium);
+            border: 1px solid var(--border-color);
+            min-width: 50px; /* Ensure consistent width */
+            justify-content: center; /* Center icon */
+            padding: 10px; /* Square padding */
+        }
+        #toggle-camera:hover, #toggle-mic:hover {
+            background-color: var(--background-light);
+            border-color: var(--text-secondary);
+        }
+
+        /* Specific 'Off' state for media buttons */
+        #toggle-camera.off, #toggle-mic.off {
+            background-color: var(--red-leave);
+            border-color: var(--red-leave);
+            color: var(--text-primary); /* Keep icon white on red bg */
+        }
+        #toggle-camera.off:hover, #toggle-mic.off:hover {
+            background-color: var(--red-leave-hover);
+            border-color: var(--red-leave-hover);
+        }
+
+        /* Hide irrelevant icons based on state */
+        #toggle-camera .icon-on,
+        #toggle-mic .icon-on { display: inline-block; } /* Default visible */
+        #toggle-camera .icon-off,
+        #toggle-mic .icon-off { display: none; } /* Default hidden */
+
+        #toggle-camera.off .icon-on,
+        #toggle-mic.off .icon-on { display: none; } /* Hide 'on' icon when off */
+        #toggle-camera.off .icon-off,
+        #toggle-mic.off .icon-off { display: inline-block; } /* Show 'off' icon when off */
+
+
+        /* Share Screen Button - Adjust styling if needed */
+        #shareScreen {
+            background-color: var(--background-medium);
+            border: 1px solid var(--border-color);
+        }
+        #shareScreen:hover {
+            background-color: var(--background-light);
+            border-color: var(--text-secondary);
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: var(--background-dark);
+            color: var(--text-secondary);
+            padding: 12px;
+            text-align: center;
+            font-family: 'Noto Sans Oriya', sans-serif;
+            font-size: 0.9em;
+            height: auto;
+            border-top: 1px solid var(--background-light);
+            text-decoration: none; 
+        }
+
+        footer a {
+            color: var(--accent-purple);
+            text-decoration: none;
+            font: bold 12px/1.1 "Noto Sans Oriya", sans-serif;
+
+        }
+
+        footer a:hover {
+            text-decoration: none;
+            outline: none;
+    box-shadow: none;
+    color:#ccaf2e ;
+    text-decoration: none; 
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .peer-id-container {
+                 gap: 5px;
+            }
+            h3#show-peer {
+                max-width: 290px; /* Adjust max width */
+                 font-size: 0.8em;
+                 padding: 6px 8px;
+            }
+             #copy-peer-id svg {
+                 width: calc(var(--copy-icon-size) * 0.9);
+                 height: calc(var(--copy-icon-size) * 0.9);
+            }
+
+            #ourVideo {
+                width: 120px;
+                height: 90px;
+                top: 15px;
+                right: 15px;
+            }
+            .section1 {
+                padding: 15px;
+            }
+            .controls {
+                /* Keep controls in a row, but allow wrapping */
+                 padding: 15px;
+                 gap: 10px;
+            }
+            .controls input#peerID {
+                max-width: 180px; /* Adjust input width */
+                 flex-grow: 0; /* Don't let it grow too much */
+            }
+             .controls button {
+                 font-size: 0.85em;
+                 padding: 8px 12px;
+                 gap: 5px;
+            }
+             #toggle-camera, #toggle-mic {
+                 padding: 8px;
+                 min-width: 40px;
+            }
+             .controls button svg {
+                 width: calc(var(--control-icon-size) * 0.9);
+                 height: calc(var(--control-icon-size) * 0.9);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                flex-direction: column; /* Stack peer id and hidden video placeholder */
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .peer-id-container {
+                 width: 100%; /* Take full width */
+            }
+             h3#show-peer {
+                 max-width: none; /* Allow full width */
+                 flex-grow: 1;
+             }
+            #ourVideo {
+                width: 90px;
+                height: 67px;
+                top: 10px;
+                right: 10px;
+            }
+            
+             .controls {
+                justify-content: space-around; /* Better spacing */
+            }
+            .controls input#peerID {
+                flex-basis: 100%; /* Make input take full width on its own line */
+                max-width: none;
+                order: 1; /* Put input first visually */
+            }
+             #call-peer {
+                 order: 2; /* Call button next */
+                 flex-grow: 1; /* Allow call button to grow */
+             }
+             #toggle-mic, #toggle-camera, #shareScreen {
+                 order: 3; /* Other controls last */
+             }
+        }
+        .lang-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    font: bold 16px/1.5 "Noto Sans Oriya", sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+.lang-btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+.lang-btn:hover {
+    outline: none;
+    box-shadow: none;
+    color:#cc872e ;
+    text-decoration: none; 
+}
+.lang-btn1 {
+    background: none;
+    border: none;
+    color: #552ecc;
+    font: bold 16px/1.5 "Noto Sans Oriya", sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    padding: 5px 10px;
+    display: inline-block;
+    transition: color 0.5s ease;
+}
+
+.lang-btn1:focus {
+    outline: none;
+    box-shadow: none;
+   
+}
+.lang-btn1:hover {
+    outline: none;
+    box-shadow: none;
+    color:inherit ;
+    text-decoration: none; 
+}
+
+    </style>
+</head>
+<!-- 
+  ସଚେତନତା: SB Video Call Web App କୁ ଡାଉନଲୋଡ୍ କରିବା, ବିକ୍ରୟ କରିବା ଆଇନ ସମ୍ମତ ନୁହେଁ। 
+  ଏହି ପ୍ରକଳ୍ପଟି ମାନ୍ୟମାନ୍ୟ ଏବଂ ମୁକ୍ତ ଅଟେ ସେହିପାଇଁ କପି,ଚୋରୀ  କିମ୍ବା ବିକ୍ରୟ କରିବା ଲଜ୍ୟା କାମ। 
+  ଅଧିକାର ଲଙ୍ଘନ କରି ପୁନରୁତ୍ପାଦନ କିମ୍ବା ବିତରଣ କରିବା ଆଇନ ଅନୁଯାଇ ଅପରାଧ ଅଟେ | ଆଉ ଯଦି ବି ତମେ ଏହା କରୁଛ ତାହେଲେ ତୁମେ ଗୋଟେ ମୂର୍ଖ ଓ ଅଶିକ୍ଷିତ |
+-->
+
+<body>
+    <nav class="navbar">
+        
+        <!-- Peer ID and Copy Button Container -->
+        <div class="peer-id-container">
+            <h3 id="show-peer"> ଏସ୍‌ବି ଆଇଡି ସୃଷ୍ଟି ହେଉଛି   </h3>
+            <button id="copy-peer-id" title="SB ID କପି କରନ୍ତୁ">
+                <!-- Default Copy Icon -->
+                <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z"/>
+                </svg>
+                 <!-- Checkmark Icon (shown after copy) -->
+                 <svg class="icon-copied" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                 </svg>
+            </button>
+        </div>
+      
+        <!-- This div is just a placeholder in the flex layout for the absolutely positioned video -->
+        <div class="video1">
+            <div id="ourVideo">
+                <!-- Local video added here by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <section class="section1">
+        <div id="remoteVideo">
+            <!-- Remote video added here by JS -->
+        </div>
+    </section>
+
+    <div class="controls"> <!-- Renamed class from btn to controls -->
+        <input id="peerID" placeholder="ଏସ୍‌ବି ଆଇଡି ପ୍ରବେଶ କରନ୍ତୁ">
+        <button id="call-peer">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+             </svg>
+             ଯୋଗାଯୋଗ କରନ୍ତୁ
+        </button>
+<!-- 
+  ସଚେତନତା: SB Video Call Web App କୁ ଡାଉନଲୋଡ୍ କରିବା, ବିକ୍ରୟ କରିବା ଆଇନ ସମ୍ମତ ନୁହେଁ। 
+  ଏହି ପ୍ରକଳ୍ପଟି ମାନ୍ୟମାନ୍ୟ ଏବଂ ମୁକ୍ତ ଅଟେ ସେହିପାଇଁ କପି,ଚୋରୀ  କିମ୍ବା ବିକ୍ରୟ କରିବା ଲଜ୍ୟା କାମ। 
+  ଅଧିକାର ଲଙ୍ଘନ କରି ପୁନରୁତ୍ପାଦନ କିମ୍ବା ବିତରଣ କରିବା ଆଇନ ଅନୁଯାଇ ଅପରାଧ ଅଟେ | ଆଉ ଯଦି ବି ତମେ ଏହା କରୁଛ ତାହେଲେ ତୁମେ ଗୋଟେ ମୂର୍ଖ ଓ ଅଶିକ୍ଷିତ |
+-->
+
+        <!-- Mute/Unmute Button -->
+        <button id="toggle-mic" title="Mute/Unmute Microphone">
+            <!-- Mic On Icon -->
+            <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+             <!-- Mic Off Icon -->
+             <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+                 <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3.646-7.354l-8 8a.5.5 0 0 0 .708.708l8-8a.5.5 0 0 0-.708-.708z"/>
+                 <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-.13.877l-1.684-1.683A3.002 3.002 0 0 1 11 8V3a2 2 0 0 0-4 0v.123l.612.611A3.01 3.01 0 0 1 8 3a2 2 0 0 0-1.848 1.214L5 5.123V3z"/>
+             </svg>
+        </button>
+
+        <!-- Camera On/Off Button -->
+        <button id="toggle-camera" title="କ୍ୟାମେରା ଚାଲୁ କରନ୍ତୁ / ବନ୍ଦ କରନ୍ତୁ">
+             <!-- Camera On Icon -->
+             <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A.5.5 0 0 1 15 3.5v9a.5.5 0 0 1-.407.498l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/>
+             </svg>
+             <!-- Camera Off Icon -->
+             <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A.5.5 0 0 0 15 12.197V3.803a.5.5 0 0 0-.407-.498l-3.11 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365z"/>
+                 <path d="M2.41 1.033a.5.5 0 0 0-.683-.066L.379 2.68A.5.5 0 0 0 .173 3H.5a.5.5 0 0 0 .5.5v7a.5.5 0 0 0 .5.5h6.472L11.59 15.4a.5.5 0 0 0 .825-.37l.02-.002.442-1.106a.5.5 0 0 0-.066-.683L2.41 1.033z"/>
+             </svg>
+        </button>
+
+        <!-- Share Screen Button (kept original structure) -->
+        <button id="shareScreen" title="ସ୍କ୍ରିନ୍ ସେୟାର କରନ୍ତୁ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-display-fill" viewBox="0 0 16 16">
+                <path d="M5.75 13.5c.167-.333.25-.833.25-1.5h4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75z"/>
+                <path d="M13.991 3H2c-.325 0-.502.078-.602.145a.758.758 0 0 0-.254.338c-.068.14-.073.341-.073.517v6c0 .176.005.377.073.517.048.104.14.234.254.338.1.067.277.145.602.145h11.991c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.338c.068-.14.073-.341.073-.517v-6c0-.176-.005-.377-.073-.517a.758.758 0 0 0-.254-.338C14.493 3.078 14.316 3 13.991 3z"/>
+            </svg>
+            ସ୍କ୍ରିନ୍ ସେୟାର
+        </button>  
+    </div>
+  
+    
+    <footer class="down">© 2019-25 <a href="http://instagram.com/sandeepbiswalg/">Sandeep Biswal G </a> | Version 1.7   <div class="language-switcher">
+        <a href="#" class="lang-btn1">ଓଡ଼ିଆ</a>
+        <a href="../index.html" class="lang-btn">English</a>
+             
+    </div></footer>
+<!-- 
+  ସଚେତନତା: SB Video Call Web App କୁ ଡାଉନଲୋଡ୍ କରିବା, ବିକ୍ରୟ କରିବା ଆଇନ ସମ୍ମତ ନୁହେଁ। 
+  ଏହି ପ୍ରକଳ୍ପଟି ମାନ୍ୟମାନ୍ୟ ଏବଂ ମୁକ୍ତ ଅଟେ ସେହିପାଇଁ କପି,ଚୋରୀ  କିମ୍ବା ବିକ୍ରୟ କରିବା ଲଜ୍ୟା କାମ। 
+  ଅଧିକାର ଲଙ୍ଘନ କରି ପୁନରୁତ୍ପାଦନ କିମ୍ବା ବିତରଣ କରିବା ଆଇନ ଅନୁଯାଇ ଅପରାଧ ଅଟେ | ଆଉ ଯଦି ବି ତମେ ଏହା କରୁଛ ତାହେଲେ ତୁମେ ଗୋଟେ ମୂର୍ଖ ଓ ଅଶିକ୍ଷିତ |
+-->
+
+<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+<script>
+    window.addEventListener('load', (event) => {
+        const peer = new Peer();
+        let myStream;
+        let currentPeer;
+        let peerList = [];
+
+        // DOM Elements
+        const showPeerElement = document.getElementById("show-peer");
+        const copyPeerIdButton = document.getElementById("copy-peer-id");
+        const copyIcon = copyPeerIdButton.querySelector('.icon-copy');
+        const copiedIcon = copyPeerIdButton.querySelector('.icon-copied');
+        const peerIdInput = document.getElementById("peerID");
+        const callButton = document.getElementById("call-peer");
+        const shareScreenButton = document.getElementById("shareScreen");
+        const toggleMicButton = document.getElementById("toggle-mic");
+        const toggleCameraButton = document.getElementById("toggle-camera");
+        const ourVideoContainer = document.getElementById("ourVideo");
+        const remoteVideoContainer = document.getElementById("remoteVideo");
+
+        // State variables
+        let isMicMuted = false;
+        let isCameraOff = false;
+
+        peer.on('open', function (id) {
+            showPeerElement.innerHTML = id;
+            showPeerElement.title = id; // Add title for full ID on hover
+            // Enable copy button now that we have an ID
+            copyPeerIdButton.disabled = false;
+        });
+
+        peer.on('call', function (call) {
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then((stream) => {
+                myStream = stream;
+                addOurVideo(stream);
+                // Ensure buttons reflect initial stream state
+                updateMediaButtonStates();
+
+                call.answer(stream); // Answer the call with our stream
+
+                call.on('stream', function (remoteStream) {
+                    // If it's a new peer
+                    if (!peerList.includes(call.peer)) {
+                        addRemoteVideo(remoteStream);
+                        currentPeer = call.peerConnection; // Corrected property name
+                        peerList.push(call.peer);
+                        console.log("ଏସ୍‌ବି ଆଇଡି ସହିତ ସଂଯୁକ୍ତ ହୋଇଛି:", call.peer);
+                    }
+                });
+
+                call.on('close', () => {
+                    console.log("କଲ୍‌ ବ୍ୟବହାରକାରୀ ଦ୍ୱାରା ବନ୍ଦ କରାଯାଇଛି:", call.peer);
+                    removeRemoteVideo(); // Optional: remove video when call ends
+                    peerList = peerList.filter(p => p !== call.peer);
+                });
+
+                call.on('error', (err) => {
+                     console.error("କଲ୍‌ରେ ତ୍ରୁଟି ଘଟିଛି:", err);
+                     removeRemoteVideo();
+                     peerList = peerList.filter(p => p !== call.peer);
+                });
+
+
+            }).catch((err) => {
+                console.error("ଲୋକାଲ୍ ସ୍ଟ୍ରିମ୍ ମିଳାଇବାରେ ବିଫଳ", err);
+                alert("କ୍ୟାମେରା / ମାଇକ୍‌ରୋଫୋନ୍‌କୁ ଆକ୍ସେସ୍‌ କରିପାରିଲାନି। ଦୟାକରି ଅନୁମତିଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ।");
+            });
+        });
+
+        peer.on('error', (err) => {
+            console.error("PeerJS error:", err);
+            if (err.type === 'unavailable-id') {
+                 alert(`ଏସ୍‌ବି ଆଇଡି "${peerIdInput.value}" ଉପଲବ୍ଧ ନାହିଁ`)
+            } else if (err.type === 'peer-unavailable') {
+                 alert(`ଏସ୍‌ବି ଆଇଡି ସହିତ ସଂଯୁକ୍ତ ହୋଇପାରିଲାନି "${peerIdInput.value}" | ଦୟାକରି ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ଏହା ସଠିକ୍ ଅଟେ ଓ ବ୍ୟବହାରକାରୀ ଅନଲାଇନ୍ ଅଛନ୍ତି ।`)
+                 showPeerElement.innerHTML = peer.id; // Reset display
+            } else {
+                 alert("ସଂଯୋଗ ସହିତ ଏକ ତ୍ରୁଟି ଘଟିଛି: " + err.message);
+            }
+             showPeerElement.innerHTML = peer.id || "ତ୍ରୁଟି, ପୁନଃ ଆରମ୍ଭ କରନ୍ତୁ"; // Reset display on error
+        });
+
+        // --- Event Listeners ---
+
+        copyPeerIdButton.addEventListener('click', () => {
+            const peerId = showPeerElement.innerText;
+            if (peerId && peerId !== " Getting ID....") {
+                navigator.clipboard.writeText(peerId).then(() => {
+                    // Visual feedback
+                    copyIcon.style.display = 'none';
+                    copiedIcon.style.display = 'inline-block';
+                    copyPeerIdButton.title = "କପି ହୋଇଗଲା!";
+
+                    // Revert after a short delay
+                    setTimeout(() => {
+                        copyIcon.style.display = 'inline-block';
+                        copiedIcon.style.display = 'none';
+                         copyPeerIdButton.title = "ଏସ୍‌ବି ଆଇଡି କପି କରନ୍ତୁ";
+                    }, 1500);
+                }).catch(err => {
+                    console.error('ଏସ୍‌ବି ଆଇଡି କପି କରିବାରେ ବିଫଳ: ', err);
+                    alert("ଆଇଡି କପି କରିବାରେ ବିଫଳ। ଆପଣକୁ କ୍ଲିପବୋର୍ଡ ଅନୁମତିଗୁଡିକୁ ସକ୍ରିୟ କରିବାକୁ ପଡ଼ିପାରେ ");
+                });
+            }
+        });
+
+        callButton.addEventListener('click', () => {
+            const remotePeerId = peerIdInput.value.trim();
+            if (!remotePeerId) {
+                alert("ଦୟାକରି କଲ୍‌ କରିବାକୁ ଏକ ଏସ୍‌ବି ଆଇଡି ପ୍ରବେଶ କରନ୍ତୁ");
+                return;
+            }
+            if (remotePeerId === peer.id) {
+                 alert("ଆପଣ ନିଜକୁ କଲ୍‌ କରିପାରିବେନାହିଁ");
+                 return;
+            }
+            console.log(`ଏସ୍‌ବି ଆଇଡିକୁ କଲ୍‌ କରୁଛି : ${remotePeerId}`);
+            showPeerElement.title = `ସଂଯୁକ୍ତ କଯାଉଅଛି  ${remotePeerId}...`; // Update title
+            showPeerElement.innerHTML = `ସଂଯୁକ୍ତ କରୁଛି...`; // Update text
+            callPeer(remotePeerId);
+        });
+
+        // Share Screen (basic implementation from original)
+        shareScreenButton.addEventListener('click', () => {
+             if (!currentPeer) {
+                 alert("ଆପଣଙ୍କୁ ସ୍କ୍ରିନ୍ ସେୟାର କରିବା ପାଇଁ କଲ୍‌ ମଧ୍ୟରେ ଥିବା ଆବଶ୍ୟକ");
+                 return;
+             }
+            navigator.mediaDevices.getDisplayMedia({
+                video: {
+                    cursor: "always"
+                },
+                audio: { // Request audio too, might fail if unsupported
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            }).then((stream) => {
+                const videoTrack = stream.getVideoTracks()[0];
+                 const audioTrack = stream.getAudioTracks()[0]; // Might be undefined
+
+                // Find the current video sender
+                let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
+
+                if (videoSender) {
+                    videoSender.replaceTrack(videoTrack);
+                } else {
+                    console.warn("ପରିବର୍ତ୍ତନ କରିବାକୁ କୌଣସି ଭିଡିଓ ପ୍ରେରକ ମିଳିଲାନାହିଁ ");
+                    // Optionally add the track if none exists (less common for replace scenario)
+                    // currentPeer.addTrack(videoTrack, myStream);
+                }
+
+                 // Find the current audio sender (if screen sharing audio exists and is desired)
+                 if (audioTrack) {
+                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
+                     if (audioSender) {
+                          audioSender.replaceTrack(audioTrack);
+                     } else {
+                         console.warn("ସ୍କ୍ରିନ୍ ସେୟାର ଧ୍ୱନି ପାଇଁ ପରିବର୍ତ୍ତନ କରିବାକୁ କୌଣସି ଧ୍ୱନି ପ୍ରେରକ ମିଳିଲାନି");
+                         // currentPeer.addTrack(audioTrack, myStream);
+                     }
+                 }
+
+
+                // When the user stops sharing via the browser UI
+                videoTrack.onended = () => {
+                    stopScreenShare();
+                     if (audioTrack) audioTrack.stop(); // Stop screen audio track too
+                };
+                 if (audioTrack) {
+                      audioTrack.onended = () => { // Handle audio track stopping separately if needed
+                           stopScreenShare(); // Might call stopScreenShare twice, but safe
+                      };
+                 }
+            }).catch((err) => {
+                console.error("ଡିସ୍ପ୍ଲେ ମିଡିଆ ମିଳିପାରିଲାନି", err);
+                alert("ସ୍କ୍ରିନ୍ ସେୟାରିଂ ଆରମ୍ଭ କରିପାରିଲାନି, ତ୍ରୁଟି: " + err.message);
+                 stopScreenShare(); // Ensure we revert if permission denied etc.
+            });
+        });
+
+        // Toggle Microphone
+        toggleMicButton.addEventListener('click', () => {
+            if (!myStream) return; // No stream available
+
+            const audioTracks = myStream.getAudioTracks();
+            if (audioTracks.length > 0) {
+                isMicMuted = !isMicMuted; // Toggle state first
+                audioTracks[0].enabled = !isMicMuted; // Apply the *new* state
+                updateMediaButtonStates(); // Update button visuals
+                console.log(`ମାଇକ୍‌ରୋଫୋନ୍ ${isMicMuted ? 'ଧ୍ୱନି ବନ୍ଦ ହୋଇଛି' : 'ଧ୍ୱନି ଚାଲୁ ହୋଇଛି'}`);
+            } else {
+                 console.warn("ଲୋକାଲ୍ ସ୍ଟ୍ରିମ୍‌ରେ ଟୋଗଲ୍ କରିବା ପାଇଁ କୌଣସି ଧ୍ୱନି ଟ୍ରାକ୍ ମିଳିଲାନି");
+            }
+        });
+
+        // Toggle Camera
+        toggleCameraButton.addEventListener('click', () => {
+            if (!myStream) return; // No stream available
+
+            const videoTracks = myStream.getVideoTracks();
+             if (videoTracks.length > 0) {
+                 isCameraOff = !isCameraOff; // Toggle state
+                 videoTracks[0].enabled = !isCameraOff; // Apply the *new* state
+                 updateMediaButtonStates(); // Update button visuals
+                 ourVideoContainer.classList.toggle('camera-off', isCameraOff); // Toggle PiP visual state
+                 console.log(`କ୍ୟାମେରା ${isCameraOff ? 'ବନ୍ଦ' : 'ଚାଲୁ'}`);
+            } else {
+                 console.warn("ଲୋକାଲ୍ ସ୍ଟ୍ରିମ୍‌ରେ ଟୋଗଲ୍ କରିବା ପାଇଁ କୌଣସି ଭିଡିଓ ଟ୍ରାକ୍ ମିଳିଲାନି");
+            }
+        });
+
+
+        // --- Helper Functions ---
+
+        function callPeer(id) {
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then((stream) => {
+                myStream = stream;
+                addOurVideo(stream);
+                // Ensure buttons reflect initial stream state
+                updateMediaButtonStates();
+
+                console.log(`କଲ୍‌ କରିବାକୁ ଆରମ୍ଭ କରୁଛି ${id}`);
+                const call = peer.call(id, stream);
+
+                 // Handle stream from the remote peer
+                 call.on('stream', function (remoteStream) {
+                    if (!peerList.includes(call.peer)) {
+                        addRemoteVideo(remoteStream);
+                        currentPeer = call.peerConnection; // Corrected property name
+                        peerList.push(call.peer);
+                         showPeerElement.innerHTML = peer.id; // Reset display after connection
+                         showPeerElement.title = peer.id;
+                         console.log("ଏସ୍‌ବି ଆଇଡି ସହିତ ସଂଯୁକ୍ତ ହୋଇଛି:", call.peer);
+                    }
+                 });
+
+                 call.on('close', () => {
+                     console.log("କଲ୍‌ ବନ୍ଦ କରାଯାଇଛି:", call.peer);
+                     removeRemoteVideo();
+                     peerList = peerList.filter(p => p !== call.peer);
+                     showPeerElement.innerHTML = peer.id; // Reset display
+                 });
+
+                 call.on('error', (err) => {
+                      console.error("ଏସ୍‌ବି ଆଇଡି କଲ୍‌ ତ୍ରୁଟି:", err);
+                      removeRemoteVideo();
+                      peerList = peerList.filter(p => p !== call.peer);
+                      showPeerElement.innerHTML = peer.id; // Reset display
+                      alert("କଲ୍‌ ବିଫଳ ହୋଇଛି: " + err.message);
+                 });
+
+            }).catch((err) => {
+                console.error("କଲ୍‌ କରିବା ପାଇଁ ଲୋକାଲ୍ ସ୍ଟ୍ରିମ୍ ମିଳିଲାନି", err);
+                alert("କଲ୍‌ କରିବା ପାଇଁ କ୍ୟାମେରା / ମାଇକ୍‌ରୋଫୋନ୍‌କୁ ଆକ୍ସେସ୍‌ କରିପାରିଲାନି। ଦୟାକରି ଅନୁମତିଗୁଡିକୁ ଯାଞ୍ଚ କରନ୍ତୁ");
+                 showPeerElement.innerHTML = peer.id; // Reset display on error
+            });
+        }
+
+        function stopScreenShare() {
+            if (!myStream || !currentPeer) {
+                 console.log("ବର୍ତ୍ତମାନ ସେୟାର କରୁନାହିଁ କିମ୍ବା କୌଣସି ସକ୍ରିୟ କଲ୍‌ ନାହିଁ");
+                 return;
+            }
+             console.log("ସ୍କ୍ରିନ୍ ସେୟାର ବନ୍ଦ କରାଯାଇଛି ଏବଂ କ୍ୟାମେରାକୁ ପୁନଃ ସେଟ୍‌ କରାଯାଇଛି");
+
+             // Get original camera/mic tracks
+             navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                 .then(originalStream => {
+                     const videoTrack = originalStream.getVideoTracks()[0];
+                     const audioTrack = originalStream.getAudioTracks()[0]; // Get original audio too
+
+                     let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
+                     if (videoSender && videoTrack) {
+                         videoSender.replaceTrack(videoTrack);
+                     } else {
+                          console.warn("ଭିଡିଓ ପ୍ରେରକ କିମ୍ବା କ୍ୟାମେରା ଟ୍ରାକ୍ ପୁନଃ ସେଟ୍ କରିବା ପାଇଁ ମିଳିଲାନି");
+                     }
+
+                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
+                     if (audioSender && audioTrack) {
+                          audioSender.replaceTrack(audioTrack);
+                     } else {
+                           console.warn("ଧ୍ୱନି ପ୍ରେରକ କିମ୍ବା ମାଇକ୍‌ ଟ୍ରାକ୍ ପୁନଃ ସେଟ୍ କରିବା ପାଇଁ ମିଳିଲାନି");
+                     }
+
+                      // Update myStream to the original one again for local toggles
+                      // Stop the old stream tracks first to release camera/mic if needed
+                      myStream.getTracks().forEach(track => track.stop());
+                      myStream = originalStream;
+                       // Re-apply mute/camera off states if they were active
+                       myStream.getAudioTracks()[0].enabled = !isMicMuted;
+                       myStream.getVideoTracks()[0].enabled = !isCameraOff;
+                       // Update local video display
+                       const localVideo = ourVideoContainer.querySelector('.ourvideo');
+                       if (localVideo) {
+                            localVideo.srcObject = myStream;
+                       }
+
+
+                 })
+                 .catch(err => {
+                     console.error("ସ୍କ୍ରିନ୍ ସେୟାର ପୁନଃ ସେଟ୍ କରିବା ପାଇଁ କ୍ୟାମେରା ସ୍ଟ୍ରିମ୍ ମିଳିଲାନି:", err);
+                      alert("ସ୍କ୍ରିନ୍ ସେୟାର ପରେ କ୍ୟାମେରାକୁ ପୁନଃ ସ୍ବିଚ୍‌ କରିପାରିଲାନି");
+                      // Attempt to stop the screen share track anyway
+                     let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
+                     if (videoSender && videoSender.track) {
+                         videoSender.track.stop(); // Stop the screen track
+                     }
+                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
+                      if (audioSender && audioSender.track && audioSender.track.label.includes('screen')) { // Be careful only to stop screen audio
+                          audioSender.track.stop();
+                      }
+                 });
+        }
+
+        function addRemoteVideo(stream) {
+            // Clear previous remote video if any
+            removeRemoteVideo();
+
+            const video = document.createElement("video");
+            video.classList.add("video");
+            video.srcObject = stream;
+            video.autoplay = true; // Ensure autoplay
+            video.playsInline = true; // Important for mobile
+            video.play().catch(e => console.error("ଦୂରସ୍ଥ ଭିଡିଓ ପ୍ଲେ କରିବାରେ ବିଫଳ:", e)); // Play and catch errors
+            remoteVideoContainer.append(video);
+        }
+
+        function removeRemoteVideo() {
+             const remoteVideo = remoteVideoContainer.querySelector('.video');
+             if (remoteVideo) {
+                 if (remoteVideo.srcObject) {
+                     remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+                 }
+                 remoteVideo.remove();
+                 console.log("ଦୂରସ୍ଥ ଭିଡିଓ ହଟାଯାଇଛି");
+             }
+        }
+
+
+        function addOurVideo(stream) {
+            // Clear previous local video if any
+             const existingVideo = ourVideoContainer.querySelector('.ourvideo');
+             if (existingVideo) {
+                 if (existingVideo.srcObject) {
+                      existingVideo.srcObject.getTracks().forEach(track => track.stop());
+                 }
+                 existingVideo.remove();
+             }
+
+            const video = document.createElement("video");
+            video.classList.add("ourvideo");
+            video.srcObject = stream;
+            video.muted = true; // Mute local video playback to prevent echo
+            video.playsInline = true;
+            video.autoplay = true;
+            video.play().catch(e => console.error("ଲୋକାଲ୍ ଭିଡିଓ ପ୍ଲେ କରିବାରେ ବିଫଳ:", e));
+            ourVideoContainer.append(video);
+            ourVideoContainer.classList.remove('camera-off'); // Ensure PiP shows video initially
+        }
+
+        // Function to update button appearance based on state
+        function updateMediaButtonStates() {
+            // Mic Button
+            if (isMicMuted) {
+                toggleMicButton.classList.add('off');
+                toggleMicButton.title = "ମାଇକ୍‌ରୋଫୋନ୍ ଚାଲୁ କରନ୍ତୁ";
+            } else {
+                toggleMicButton.classList.remove('off');
+                toggleMicButton.title = "ମାଇକ୍‌ରୋଫୋନ୍ ବନ୍ଦ କରନ୍ତୁ";
+            }
+
+            // Camera Button
+            if (isCameraOff) {
+                toggleCameraButton.classList.add('off');
+                toggleCameraButton.title = "କ୍ୟାମେରା ଚାଲୁ କରନ୍ତୁ";
+            } else {
+                toggleCameraButton.classList.remove('off');
+                toggleCameraButton.title = "କ୍ୟାମେରା ବନ୍ଦ କରନ୍ତୁ";
+            }
+
+             // Optional: Disable buttons if no stream
+             const hasStream = !!myStream;
+             toggleMicButton.disabled = !hasStream;
+             toggleCameraButton.disabled = !hasStream;
+             shareScreenButton.disabled = !hasStream || !currentPeer; // Also disable share if not in call
+        }
+
+        // Initial state for buttons (disabled until stream is ready)
+        copyPeerIdButton.disabled = true; // Disabled until ID is fetched
+        updateMediaButtonStates();
+
+
+    }); // End window.load
+</script>
+
+<!-- 
+  ସଚେତନତା: SB Video Call Web App କୁ ଡାଉନଲୋଡ୍ କରିବା, ବିକ୍ରୟ କରିବା ଆଇନ ସମ୍ମତ ନୁହେଁ। 
+  ଏହି ପ୍ରକଳ୍ପଟି ମାନ୍ୟମାନ୍ୟ ଏବଂ ମୁକ୍ତ ଅଟେ ସେହିପାଇଁ କପି,ଚୋରୀ  କିମ୍ବା ବିକ୍ରୟ କରିବା ଲଜ୍ୟା କାମ। 
+  ଅଧିକାର ଲଙ୍ଘନ କରି ପୁନରୁତ୍ପାଦନ କିମ୍ବା ବିତରଣ କରିବା ଆଇନ ଅନୁଯାଇ ଅପରାଧ ଅଟେ | ଆଉ ଯଦି ବି ତମେ ଏହା କରୁଛ ତାହେଲେ ତୁମେ ଗୋଟେ ମୂର୍ଖ ଓ ଅଶିକ୍ଷିତ |
+-->
+
+</html>
