@@ -11,5 +11,6 @@
       "sizes": "48x48 72x72 96x96 128x128 192x192 256x256 384x384 512x512",
       "type": "image/x-icon"
     }
-  ]
+  ],
+  "description": "Simple video calling app to connect with others instantly"
 }
