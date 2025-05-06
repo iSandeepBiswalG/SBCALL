@@ -12,6 +12,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/manifest.json">
+<link rel="icon" href="https://raw.githubusercontent.com/iSandeepBiswalG/SBCALL/refs/heads/main/sbg/sbg.ico" type="image/x-icon">
+<meta name="theme-color" content="#007bff">
   <link rel="icon" href="/sbg/sbg.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/sbg/sbg.ico" type="image/x-icon">
     <title>SB Video Call</title>
@@ -1031,6 +1034,19 @@
 
     }); // End window.load
 </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('ServiceWorker registered with scope:', registration.scope);
+        }, function(error) {
+          console.log('ServiceWorker registration failed:', error);
+        });
+    });
+  }
+</script>
+
 <!-- 
   WARNING: Do not download, sell, or distribute the SB Video Call Web App. 
   This project is free and cannot be copied or sold. 
