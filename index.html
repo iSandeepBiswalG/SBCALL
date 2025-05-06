@@ -631,9 +631,7 @@
              Share Screen
         </button>  
     </div>
-    <button id="install-button" style="display: none;">
-  📲 Install SB Video Call
-</button>
+ 
     
     <footer class="down">© 2019-25 <a href="http://instagram.com/sandeepbiswalg/">Sandeep Biswal G </a> | Version 1.7   <div class="language-switcher">
         <a href="#" class="lang-btn1">English</a>
@@ -1080,37 +1078,8 @@
 </script>
 
 
-<!-- delete these -->
 
 
-<script>
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the default mini-infobar from appearing
-    e.preventDefault();
-    deferredPrompt = e;
-
-    // Show your own install button (or trigger it programmatically)
-    const installBtn = document.getElementById('install-button');
-    if (installBtn) {
-      installBtn.style.display = 'inline-block';
-
-      installBtn.addEventListener('click', () => {
-        installBtn.style.display = 'none';
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          } else {
-            console.log('User dismissed the install prompt');
-          }
-          deferredPrompt = null;
-        });
-      });
-    }
-  });
-</script>
 <!-- 
   WARNING: Do not download, sell, or distribute the SB Video Call Web App. 
   This project is free and cannot be copied or sold. 
