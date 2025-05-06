@@ -16,7 +16,11 @@ Introducing SB Video Call Web App (Peer-to-Peer) – a seamless, secure, and hig
 - 🚫 Error handling for invalid/self SB IDs
 
 ## 📸 Screenshots
-
+<p float="left">
+  <img src="images/odia.png" alt="Odia" width="400"/>
+  &nbsp;&nbsp;
+  <img src="images/eng.png" alt="Eng" width="400"/>
+</p>
 
 
 ## 🛠️ Tech Stack
