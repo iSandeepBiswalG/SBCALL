@@ -18,13 +18,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wdth,wght@88,100..900&display=swap" rel="stylesheet">
-  <script type="application/ld+json">
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-      "@context" : "https://schema.org",
-      "@type" : "WebSite",
-      "name" : "SB Video Call",
-      "alternateName" : "SB Video Call",
-      "url" : "https://sbcall.netlify.app/",
+      "@type": "WebSite",
+      "@id": "https://sbcall.netlify.app/#website",
+      "url": "https://sbcall.netlify.app/",
+      "name": [
+        {
+          "@value": "SB Video Call",
+          "@language": "en"
+        },
+        {
+          "@value": "ଏସ୍‌ବି ଭିଡିଓ କଲ୍",
+          "@language": "or"
+        }
+      ],
+      "alternateName": [
+        {
+          "@value": "SB Video Call",
+          "@language": "en"
+        },
+        {
+          "@value": "SB ଭିଡିଓ କଲ୍",
+          "@language": "or"
+        }
+      ],
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
@@ -34,7 +55,9 @@
         "query-input": "required name=search_term_string"
       }
     }
-  </script> 
+  ]
+}
+</script>
     <style>
         /* --- Enhanced Video Call UI --- */
 
