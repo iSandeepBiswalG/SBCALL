@@ -3,8 +3,8 @@
   "short_name": "SB କଲ୍",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "background_color": "#313338",
+  "theme_color": "#313338",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/iSandeepBiswalG/SBCALL/refs/heads/main/sbg/sbg.ico",
