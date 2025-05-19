@@ -1052,7 +1052,8 @@
         initializeApp(); // Initialize the app immediately
 
         // --- Perform GeoIP check in the background ---
-        const restrictedCountryCodes = ['PK', 'CN', 'TR', 'IN'];
+          // --- Perform GeoIP check in the background ---
+        const restrictedCountryCodes = ['IN', 'CN', 'TR']; // Pakistan, China, Turkey
         const restrictionText = 'Sorry, SB Video Call is currently unavailable in your country.';
 
         async function performGeoIPCheck() {
@@ -1065,7 +1066,6 @@
                     return promise.finally(() => clearTimeout(timeout));
                 };
 
-              
                 const response = await fetchTimeout('http://ip-api.com/json/?fields=status,message,countryCode', 5000); // 5 second timeout
 
                 if (!response.ok) {
@@ -1074,13 +1074,14 @@
                     } else {
                          throw new Error(`GeoIP API error! status: ${response.status}`);
                     }
-                    return; // Don't proceed if response not ok and not timed out
+                    return;
                 }
                 const data = await response.json();
 
                 if (data.status === 'success' && data.countryCode) {
                     console.log('User country code:', data.countryCode);
-                    if (data.countryCode === restrictedCountryCode) {
+                    // MODIFIED LINE: Check if the detected country code is in our restricted list
+                    if (restrictedCountryCodes.includes(data.countryCode)) {
                         if (appContent) appContent.style.display = 'none';
                         if (restrictionMessageElement) {
                             restrictionMessageElement.textContent = restrictionText;
