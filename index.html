@@ -1052,8 +1052,7 @@
         initializeApp(); // Initialize the app immediately
 
         // --- Perform GeoIP check in the background ---
-          // --- Perform GeoIP check in the background ---
-        const restrictedCountryCodes = ['IN', 'CN', 'TR']; // Pakistan, China, Turkey
+        const restrictedCountryCode = 'IN'; // Pakistan
         const restrictionText = 'Sorry, SB Video Call is currently unavailable in your country.';
 
         async function performGeoIPCheck() {
@@ -1066,6 +1065,12 @@
                     return promise.finally(() => clearTimeout(timeout));
                 };
 
+                // Using a more resilient API endpoint if ip-api.com has issues with http
+                // const response = await fetchTimeout('https://ipapi.co/json/', 5000);
+                // Fallback to ip-api.com if needed, ensure it's accessible via HTTPS if possible
+                // Or use a different service that's reliable and supports HTTPS.
+                // For ip-api.com, free tier is HTTP only. Consider proxying or a paid plan for HTTPS.
+                // Sticking with http for ip-api.com based on previous examples, but be aware of mixed content if your site is HTTPS.
                 const response = await fetchTimeout('http://ip-api.com/json/?fields=status,message,countryCode', 5000); // 5 second timeout
 
                 if (!response.ok) {
@@ -1074,14 +1079,13 @@
                     } else {
                          throw new Error(`GeoIP API error! status: ${response.status}`);
                     }
-                    return;
+                    return; // Don't proceed if response not ok and not timed out
                 }
                 const data = await response.json();
 
                 if (data.status === 'success' && data.countryCode) {
                     console.log('User country code:', data.countryCode);
-                    // MODIFIED LINE: Check if the detected country code is in our restricted list
-                    if (restrictedCountryCodes.includes(data.countryCode)) {
+                    if (data.countryCode === restrictedCountryCode) {
                         if (appContent) appContent.style.display = 'none';
                         if (restrictionMessageElement) {
                             restrictionMessageElement.textContent = restrictionText;
