@@ -1052,7 +1052,7 @@
         initializeApp(); // Initialize the app immediately
 
         // --- Perform GeoIP check in the background ---
-        const restrictedCountryCode = 'IN', 'CN', 'TR'; // Pakistan
+        const restrictedCountryCode = ['PK', 'CN', 'TR', 'IN'];
         const restrictionText = 'Sorry, SB Video Call is currently unavailable in your country.';
 
         async function performGeoIPCheck() {
