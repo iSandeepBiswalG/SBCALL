@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- 
-  WARNING: Do not download, sell, or distribute the SB Video Call Web App. 
-  This project is free and cannot be copied or sold. 
-  Unauthorized use, reproduction, or distribution is illegal and violates the terms of use. 
+<!--
+  WARNING: Do not download, sell, or distribute the SB Video Call Web App.
+  This project is free and cannot be copied or sold.
+  Unauthorized use, reproduction, or distribution is illegal and violates the terms of use.
   Respect the developers' work and ensure the app is used responsibly and ethically.
   instagram : @sandeepbiswlg
 -->
@@ -44,7 +44,7 @@
 <meta property="og:see_also" content="https://instagram.com/sandeepbiswalg">
 <meta property="og:see_also" content="https://youtube.com/sandeepbiswalg">
 
-  
+
  <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="https://raw.githubusercontent.com/iSandeepBiswalG/SBCALL/refs/heads/main/sbg/sbg.ico" type="image/x-icon">
 <meta name="theme-color" content="#313338">
@@ -57,7 +57,7 @@
 
   <link rel="icon" href="/sbg/sbg.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/sbg/sbg.ico" type="image/x-icon">
-   
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wdth,wght@88,100..900&display=swap" rel="stylesheet">
@@ -134,6 +134,15 @@
             overflow-x: hidden;
         }
 
+        /* App content wrapper - visible by default */
+        #app-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            /* min-height is handled by body if #app-content is the main child */
+        }
+
+
         /* Navbar (Top Bar Simulation) */
         .navbar {
             display: flex;
@@ -164,7 +173,6 @@
             font-weight: 500;
             text-align: left;
             overflow-wrap: break-word;
-            /* Removed fixed width/height */
             white-space: nowrap;      /* Prevent wrapping initially */
             overflow: hidden;         /* Hide overflow */
             text-overflow: ellipsis;  /* Add ellipsis */
@@ -432,7 +440,7 @@
             font-size: 0.9em;
             height: auto;
             border-top: 1px solid var(--background-light);
-            text-decoration: none; 
+            text-decoration: none;
         }
 
         footer a {
@@ -447,7 +455,7 @@
             outline: none;
     box-shadow: none;
     color:#ccaf2e ;
-    text-decoration: none; 
+    text-decoration: none;
         }
 
         /* Responsive Adjustments */
@@ -520,7 +528,7 @@
                 top: 10px;
                 right: 10px;
             }
-            
+
              .controls {
                 justify-content: space-around; /* Better spacing */
             }
@@ -557,7 +565,7 @@
     outline: none;
     box-shadow: none;
     color:#cc872e ;
-    text-decoration: none; 
+    text-decoration: none;
 }
 .lang-btn1 {
     background: none;
@@ -575,115 +583,121 @@
 .lang-btn1:focus {
     outline: none;
     box-shadow: none;
-   
+
 }
 .lang-btn1:hover {
     outline: none;
     box-shadow: none;
     color:inherit ;
-    text-decoration: none; 
+    text-decoration: none;
 }
 
     </style>
 </head>
 
 <body>
-    <nav class="navbar">
-        
-        <!-- Peer ID and Copy Button Container -->
-        <div class="peer-id-container">
-            <h3 id="show-peer"> Getting Unique SB ID....   </h3>
-            <button id="copy-peer-id" title="Copy SB ID">
-                <!-- Default Copy Icon -->
-                <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z"/>
+    <div id="app-content"> <!-- App content wrapper - visible by default -->
+        <nav class="navbar">
+
+            <!-- Peer ID and Copy Button Container -->
+            <div class="peer-id-container">
+                <h3 id="show-peer"> Getting Unique SB ID....   </h3>
+                <button id="copy-peer-id" title="Copy SB ID">
+                    <!-- Default Copy Icon -->
+                    <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6ZM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1H2Z"/>
+                    </svg>
+                     <!-- Checkmark Icon (shown after copy) -->
+                     <svg class="icon-copied" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                     </svg>
+                </button>
+            </div>
+
+            <!-- This div is just a placeholder in the flex layout for the absolutely positioned video -->
+            <div class="video1">
+                <div id="ourVideo">
+                    <!-- Local video added here by JS -->
+                </div>
+            </div>
+        </nav>
+
+        <section class="section1">
+            <div id="remoteVideo">
+                <!-- Remote video added here by JS -->
+            </div>
+        </section>
+
+        <div class="controls"> <!-- Renamed class from btn to controls -->
+            <input id="peerID" placeholder="Enter SB ID">
+            <button id="call-peer">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                     <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                 </svg>
+                Connect
+            </button>
+
+            <!-- Mute/Unmute Button -->
+            <button id="toggle-mic" title="Mute/Unmute Microphone">
+                <!-- Mic On Icon -->
+                <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+                    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
                 </svg>
-                 <!-- Checkmark Icon (shown after copy) -->
-                 <svg class="icon-copied" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                 <!-- Mic Off Icon -->
+                 <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
+                     <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3.646-7.354l-8 8a.5.5 0 0 0 .708.708l8-8a.5.5 0 0 0-.708-.708z"/>
+                     <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-.13.877l-1.684-1.683A3.002 3.002 0 0 1 11 8V3a2 2 0 0 0-4 0v.123l.612.611A3.01 3.01 0 0 1 8 3a2 2 0 0 0-1.848 1.214L5 5.123V3z"/>
                  </svg>
             </button>
+
+            <!-- Camera On/Off Button -->
+            <button id="toggle-camera" title="Turn Camera On/Off">
+                 <!-- Camera On Icon -->
+                 <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                     <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A.5.5 0 0 1 15 3.5v9a.5.5 0 0 1-.407.498l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/>
+                 </svg>
+                 <!-- Camera Off Icon -->
+                 <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16">
+                     <path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A.5.5 0 0 0 15 12.197V3.803a.5.5 0 0 0-.407-.498l-3.11 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365z"/>
+                     <path d="M2.41 1.033a.5.5 0 0 0-.683-.066L.379 2.68A.5.5 0 0 0 .173 3H.5a.5.5 0 0 0 .5.5v7a.5.5 0 0 0 .5.5h6.472L11.59 15.4a.5.5 0 0 0 .825-.37l.02-.002.442-1.106a.5.5 0 0 0-.066-.683L2.41 1.033z"/>
+                 </svg>
+            </button>
+
+            <!-- Share Screen Button (kept original structure) -->
+            <button id="shareScreen" title="Screen Share">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-display-fill" viewBox="0 0 16 16">
+                    <path d="M5.75 13.5c.167-.333.25-.833.25-1.5h4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75z"/>
+                    <path d="M13.991 3H2c-.325 0-.502.078-.602.145a.758.758 0 0 0-.254.338c-.068.14-.073.341-.073.517v6c0 .176.005.377.073.517.048.104.14.234.254.338.1.067.277.145.602.145h11.991c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.338c.068-.14.073-.341-.073-.517v-6c0-.176-.005-.377-.073-.517a.758.758 0 0 0-.254-.338C14.493 3.078 14.316 3 13.991 3z"/>
+                </svg>
+                 Share Screen
+            </button>
         </div>
-      
-        <!-- This div is just a placeholder in the flex layout for the absolutely positioned video -->
-        <div class="video1">
-            <div id="ourVideo">
-                <!-- Local video added here by JS -->
-            </div>
-        </div>
-    </nav>
 
-    <section class="section1">
-        <div id="remoteVideo">
-            <!-- Remote video added here by JS -->
-        </div>
-    </section>
 
-    <div class="controls"> <!-- Renamed class from btn to controls -->
-        <input id="peerID" placeholder="Enter SB ID">
-        <button id="call-peer">
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
-                 <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
-             </svg>
-            Connect 
-        </button>
+        <footer class="down">© 2019-25 <a href="http://instagram.com/sandeepbiswalg/">Sandeep Biswal G </a> | Version 1.9   <div class="language-switcher">
+            <a href="#" class="lang-btn1">English</a>
+            <a href="/od" class="lang-btn">ଓଡ଼ିଆ</a>
+        </div></footer>
+    </div> <!-- End #app-content -->
 
-        <!-- Mute/Unmute Button -->
-        <button id="toggle-mic" title="Mute/Unmute Microphone">
-            <!-- Mic On Icon -->
-            <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
-                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
-                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
-            </svg>
-             <!-- Mic Off Icon -->
-             <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-mute-fill" viewBox="0 0 16 16">
-                 <path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4.02 4.02 0 0 0 12 8V7a.5.5 0 0 1 1 0v1zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a4.973 4.973 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4zm3.646-7.354l-8 8a.5.5 0 0 0 .708.708l8-8a.5.5 0 0 0-.708-.708z"/>
-                 <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-.13.877l-1.684-1.683A3.002 3.002 0 0 1 11 8V3a2 2 0 0 0-4 0v.123l.612.611A3.01 3.01 0 0 1 8 3a2 2 0 0 0-1.848 1.214L5 5.123V3z"/>
-             </svg>
-        </button>
-
-        <!-- Camera On/Off Button -->
-        <button id="toggle-camera" title="Turn Camera On/Off">
-             <!-- Camera On Icon -->
-             <svg class="icon-on" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-fill" viewBox="0 0 16 16">
-                 <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A.5.5 0 0 1 15 3.5v9a.5.5 0 0 1-.407.498l-3.11-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5z"/>
-             </svg>
-             <!-- Camera Off Icon -->
-             <svg class="icon-off" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video-off-fill" viewBox="0 0 16 16">
-                 <path fill-rule="evenodd" d="M10.961 12.365a1.99 1.99 0 0 0 .522-1.103l3.11 1.382A.5.5 0 0 0 15 12.197V3.803a.5.5 0 0 0-.407-.498l-3.11 1.382A2 2 0 0 0 9.5 3H4.272l6.69 9.365z"/>
-                 <path d="M2.41 1.033a.5.5 0 0 0-.683-.066L.379 2.68A.5.5 0 0 0 .173 3H.5a.5.5 0 0 0 .5.5v7a.5.5 0 0 0 .5.5h6.472L11.59 15.4a.5.5 0 0 0 .825-.37l.02-.002.442-1.106a.5.5 0 0 0-.066-.683L2.41 1.033z"/>
-             </svg>
-        </button>
-
-        <!-- Share Screen Button (kept original structure) -->
-        <button id="shareScreen" title="Screen Share">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-display-fill" viewBox="0 0 16 16">
-                <path d="M5.75 13.5c.167-.333.25-.833.25-1.5h4c0 .667.083 1.167.25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75z"/>
-                <path d="M13.991 3H2c-.325 0-.502.078-.602.145a.758.758 0 0 0-.254.338c-.068.14-.073.341-.073.517v6c0 .176.005.377.073.517.048.104.14.234.254.338.1.067.277.145.602.145h11.991c.325 0 .502-.078.602-.145a.758.758 0 0 0 .254-.338c.068-.14.073-.341.073-.517v-6c0-.176-.005-.377-.073-.517a.758.758 0 0 0-.254-.338C14.493 3.078 14.316 3 13.991 3z"/>
-            </svg>
-             Share Screen
-        </button>  
+    <div id="restriction-message" style="display: none; text-align: center; padding: 50px; color: white; font-size: 1.2em;">
+        <!-- Message will be set by JavaScript -->
     </div>
- 
-    
-    <footer class="down">© 2019-25 <a href="http://instagram.com/sandeepbiswalg/">Sandeep Biswal G </a> | Version 1.9   <div class="language-switcher">
-        <a href="#" class="lang-btn1">English</a>
-        <a href="/od" class="lang-btn">ଓଡ଼ିଆ</a>     
-    </div></footer>
 
 <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
 <script>
-    window.addEventListener('load', (event) => {
-        const peer = new Peer();
-        let myStream;
-        let currentPeer;
-        let peerList = [];
+    // Declare peer, myStream, and currentPeerConnection in a scope accessible by both initializeApp and performGeoIPCheck
+    let peer = null;
+    let myStream = null;
+    let currentPeerConnection = null; // Used to store the RTCPeerConnection for active call
 
-        // DOM Elements
+    // Function to initialize the main PeerJS app
+    function initializeApp() {
         const showPeerElement = document.getElementById("show-peer");
         const copyPeerIdButton = document.getElementById("copy-peer-id");
-        const copyIcon = copyPeerIdButton.querySelector('.icon-copy');
-        const copiedIcon = copyPeerIdButton.querySelector('.icon-copied');
+        const copyIcon = copyPeerIdButton ? copyPeerIdButton.querySelector('.icon-copy') : null;
+        const copiedIcon = copyPeerIdButton ? copyPeerIdButton.querySelector('.icon-copied') : null;
         const peerIdInput = document.getElementById("peerID");
         const callButton = document.getElementById("call-peer");
         const shareScreenButton = document.getElementById("shareScreen");
@@ -692,15 +706,18 @@
         const ourVideoContainer = document.getElementById("ourVideo");
         const remoteVideoContainer = document.getElementById("remoteVideo");
 
-        // State variables
+        let peerList = [];
         let isMicMuted = false;
         let isCameraOff = false;
 
+        peer = new Peer(); // Initialize the higher-scoped peer
+
         peer.on('open', function (id) {
-            showPeerElement.innerHTML = id;
-            showPeerElement.title = id; // Add title for full ID on hover
-            // Enable copy button now that we have an ID
-            copyPeerIdButton.disabled = false;
+            if (showPeerElement) {
+                showPeerElement.innerHTML = id;
+                showPeerElement.title = id;
+            }
+            if (copyPeerIdButton) copyPeerIdButton.disabled = false;
         });
 
         peer.on('call', function (call) {
@@ -708,18 +725,16 @@
                 video: true,
                 audio: true
             }).then((stream) => {
-                myStream = stream;
-                addOurVideo(stream);
-                // Ensure buttons reflect initial stream state
+                myStream = stream; // Assign to higher-scoped myStream
+                addOurVideo(myStream);
                 updateMediaButtonStates();
 
-                call.answer(stream); // Answer the call with our stream
+                call.answer(myStream);
 
                 call.on('stream', function (remoteStream) {
-                    // If it's a new peer
                     if (!peerList.includes(call.peer)) {
                         addRemoteVideo(remoteStream);
-                        currentPeer = call.peerConnection; // Corrected property name
+                        currentPeerConnection = call.peerConnection; // Store RTCPeerConnection
                         peerList.push(call.peer);
                         console.log("Connected to SB ID:", call.peer);
                     }
@@ -727,352 +742,389 @@
 
                 call.on('close', () => {
                     console.log("Call closed by remote peer:", call.peer);
-                    removeRemoteVideo(); // Optional: remove video when call ends
+                    removeRemoteVideo();
+                    if (currentPeerConnection === call.peerConnection) currentPeerConnection = null;
                     peerList = peerList.filter(p => p !== call.peer);
                 });
 
                 call.on('error', (err) => {
                      console.error("Peer (SB ID) call error:", err);
                      removeRemoteVideo();
+                     if (currentPeerConnection === call.peerConnection) currentPeerConnection = null;
                      peerList = peerList.filter(p => p !== call.peer);
                 });
 
-
             }).catch((err) => {
                 console.error("Failed to get local stream", err);
-                alert("Could not access camera/microphone. Please check permissions.");
+                if (document.getElementById('app-content').style.display !== 'none') {
+                    // alert("Could not access camera/microphone. Please check permissions.");
+                }
             });
         });
 
         peer.on('error', (err) => {
             console.error("PeerJS error:", err);
-            if (err.type === 'unavailable-id') {
-                 alert(`SB ID "${peerIdInput.value}" is unavailable.`)
-            } else if (err.type === 'peer-unavailable') {
-                 alert(`Could not connect to SB ID "${peerIdInput.value}". Please ensure it's correct and the user is online.`)
-                 showPeerElement.innerHTML = peer.id; // Reset display
-            } else {
-                 alert("An error occurred with the connection: " + err.message);
+            const appIsVisible = document.getElementById('app-content').style.display !== 'none';
+            if (appIsVisible) {
+                if (err.type === 'unavailable-id') {
+                     if (peerIdInput) alert(`SB ID "${peerIdInput.value}" is unavailable.`);
+                } else if (err.type === 'peer-unavailable') {
+                     if (peerIdInput) alert(`Could not connect to SB ID "${peerIdInput.value}". Please ensure it's correct and the user is online.`);
+                } else {
+                     // alert("An error occurred with the connection: " + err.message);
+                }
             }
-             showPeerElement.innerHTML = peer.id || "Error, Refresh"; // Reset display on error
+             if (showPeerElement && peer && peer.id) {
+                showPeerElement.innerHTML = peer.id;
+             } else if (showPeerElement) {
+                showPeerElement.innerHTML = "Error, Refresh";
+             }
         });
 
         // --- Event Listeners ---
-
-        copyPeerIdButton.addEventListener('click', () => {
-            const peerId = showPeerElement.innerText;
-            if (peerId && peerId !== " Getting ID....") {
-                navigator.clipboard.writeText(peerId).then(() => {
-                    // Visual feedback
-                    copyIcon.style.display = 'none';
-                    copiedIcon.style.display = 'inline-block';
-                    copyPeerIdButton.title = "Copied!";
-
-                    // Revert after a short delay
-                    setTimeout(() => {
-                        copyIcon.style.display = 'inline-block';
-                        copiedIcon.style.display = 'none';
-                         copyPeerIdButton.title = "Copy Peer ID";
-                    }, 1500);
-                }).catch(err => {
-                    console.error('Failed to copy SB ID: ', err);
-                    alert("Failed to copy ID. You might need to enable clipboard permissions.");
-                });
-            }
-        });
-
-        callButton.addEventListener('click', () => {
-            const remotePeerId = peerIdInput.value.trim();
-            if (!remotePeerId) {
-                alert("Please enter a SB ID to call.");
-                return;
-            }
-            if (remotePeerId === peer.id) {
-                 alert("You cannot call yourself.");
-                 return;
-            }
-            console.log(`Calling to SB ID : ${remotePeerId}`);
-            showPeerElement.title = `Connecting to ${remotePeerId}...`; // Update title
-            showPeerElement.innerHTML = `Connecting...`; // Update text
-            callPeer(remotePeerId);
-        });
-
-        // Share Screen (basic implementation from original)
-        shareScreenButton.addEventListener('click', () => {
-             if (!currentPeer) {
-                 alert("You must be in a call to share your screen.");
-                 return;
-             }
-            navigator.mediaDevices.getDisplayMedia({
-                video: {
-                    cursor: "always"
-                },
-                audio: { // Request audio too, might fail if unsupported
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    sampleRate: 44100
+        if (copyPeerIdButton) {
+            copyPeerIdButton.addEventListener('click', () => {
+                if (!showPeerElement || !copyIcon || !copiedIcon) return;
+                const peerId = showPeerElement.innerText;
+                if (peerId && peerId !== " Getting Unique SB ID....   ") {
+                    navigator.clipboard.writeText(peerId).then(() => {
+                        copyIcon.style.display = 'none';
+                        copiedIcon.style.display = 'inline-block';
+                        copyPeerIdButton.title = "Copied!";
+                        setTimeout(() => {
+                            copyIcon.style.display = 'inline-block';
+                            copiedIcon.style.display = 'none';
+                            copyPeerIdButton.title = "Copy SB ID";
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed to copy SB ID: ', err);
+                        if (document.getElementById('app-content').style.display !== 'none') {
+                           alert("Failed to copy ID. You might need to enable clipboard permissions.");
+                        }
+                    });
                 }
-            }).then((stream) => {
-                const videoTrack = stream.getVideoTracks()[0];
-                 const audioTrack = stream.getAudioTracks()[0]; // Might be undefined
-
-                // Find the current video sender
-                let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
-
-                if (videoSender) {
-                    videoSender.replaceTrack(videoTrack);
-                } else {
-                    console.warn("No video sender found to replace.");
-                    // Optionally add the track if none exists (less common for replace scenario)
-                    // currentPeer.addTrack(videoTrack, myStream);
-                }
-
-                 // Find the current audio sender (if screen sharing audio exists and is desired)
-                 if (audioTrack) {
-                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
-                     if (audioSender) {
-                          audioSender.replaceTrack(audioTrack);
-                     } else {
-                         console.warn("No audio sender found to replace for screen share audio.");
-                         // currentPeer.addTrack(audioTrack, myStream);
-                     }
-                 }
-
-
-                // When the user stops sharing via the browser UI
-                videoTrack.onended = () => {
-                    stopScreenShare();
-                     if (audioTrack) audioTrack.stop(); // Stop screen audio track too
-                };
-                 if (audioTrack) {
-                      audioTrack.onended = () => { // Handle audio track stopping separately if needed
-                           stopScreenShare(); // Might call stopScreenShare twice, but safe
-                      };
-                 }
-            }).catch((err) => {
-                console.error("Unable to get display media", err);
-                alert("Could not start screen sharing. Error: " + err.message);
-                 stopScreenShare(); // Ensure we revert if permission denied etc.
             });
-        });
+        }
 
-        // Toggle Microphone
-        toggleMicButton.addEventListener('click', () => {
-            if (!myStream) return; // No stream available
+        if (callButton) {
+            callButton.addEventListener('click', () => {
+                if (!peerIdInput) return;
+                const remotePeerId = peerIdInput.value.trim();
+                if (!remotePeerId) {
+                    if (document.getElementById('app-content').style.display !== 'none') alert("Please enter a SB ID to call.");
+                    return;
+                }
+                if (peer && remotePeerId === peer.id) {
+                     if (document.getElementById('app-content').style.display !== 'none') alert("You cannot call yourself.");
+                     return;
+                }
+                console.log(`Calling to SB ID : ${remotePeerId}`);
+                if (showPeerElement) {
+                    showPeerElement.title = `Connecting to ${remotePeerId}...`;
+                    showPeerElement.innerHTML = `Connecting...`;
+                }
+                callPeer(remotePeerId);
+            });
+        }
 
-            const audioTracks = myStream.getAudioTracks();
-            if (audioTracks.length > 0) {
-                isMicMuted = !isMicMuted; // Toggle state first
-                audioTracks[0].enabled = !isMicMuted; // Apply the *new* state
-                updateMediaButtonStates(); // Update button visuals
-                console.log(`Microphone ${isMicMuted ? 'Muted' : 'Unmuted'}`);
-            } else {
-                 console.warn("No audio track found in local stream to toggle.");
-            }
-        });
+        if (shareScreenButton) {
+            shareScreenButton.addEventListener('click', () => {
+                 if (!currentPeerConnection) {
+                     if (document.getElementById('app-content').style.display !== 'none') alert("You must be in a call to share your screen.");
+                     return;
+                 }
+                navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "always" },
+                    audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }
+                }).then((stream) => {
+                    const videoTrack = stream.getVideoTracks()[0];
+                    const audioTrack = stream.getAudioTracks()[0];
+                    let videoSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                    if (videoSender) videoSender.replaceTrack(videoTrack);
+                    else console.warn("No video sender found to replace.");
 
-        // Toggle Camera
-        toggleCameraButton.addEventListener('click', () => {
-            if (!myStream) return; // No stream available
+                     if (audioTrack) {
+                         let audioSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'audio');
+                         if (audioSender) audioSender.replaceTrack(audioTrack);
+                         else console.warn("No audio sender found to replace for screen share audio.");
+                     }
+                    videoTrack.onended = () => {
+                        stopScreenShare();
+                        if (audioTrack) audioTrack.stop();
+                    };
+                    if (audioTrack) audioTrack.onended = () => stopScreenShare();
+                }).catch((err) => {
+                    console.error("Unable to get display media", err);
+                    if (document.getElementById('app-content').style.display !== 'none') alert("Could not start screen sharing. Error: " + err.message);
+                    stopScreenShare();
+                });
+            });
+        }
 
-            const videoTracks = myStream.getVideoTracks();
-             if (videoTracks.length > 0) {
-                 isCameraOff = !isCameraOff; // Toggle state
-                 videoTracks[0].enabled = !isCameraOff; // Apply the *new* state
-                 updateMediaButtonStates(); // Update button visuals
-                 ourVideoContainer.classList.toggle('camera-off', isCameraOff); // Toggle PiP visual state
-                 console.log(`Camera ${isCameraOff ? 'Off' : 'On'}`);
-            } else {
-                 console.warn("No video track found in local stream to toggle.");
-            }
-        });
+        if (toggleMicButton) {
+            toggleMicButton.addEventListener('click', () => {
+                if (!myStream) return;
+                const audioTracks = myStream.getAudioTracks();
+                if (audioTracks.length > 0) {
+                    isMicMuted = !isMicMuted;
+                    audioTracks[0].enabled = !isMicMuted;
+                    updateMediaButtonStates();
+                    console.log(`Microphone ${isMicMuted ? 'Muted' : 'Unmuted'}`);
+                } else console.warn("No audio track found in local stream to toggle.");
+            });
+        }
+        if (toggleCameraButton) {
+            toggleCameraButton.addEventListener('click', () => {
+                if (!myStream) return;
+                const videoTracks = myStream.getVideoTracks();
+                if (videoTracks.length > 0) {
+                    isCameraOff = !isCameraOff;
+                    videoTracks[0].enabled = !isCameraOff;
+                    updateMediaButtonStates();
+                    if (ourVideoContainer) ourVideoContainer.classList.toggle('camera-off', isCameraOff);
+                    console.log(`Camera ${isCameraOff ? 'Off' : 'On'}`);
+                } else console.warn("No video track found in local stream to toggle.");
+            });
+        }
 
 
         // --- Helper Functions ---
-
         function callPeer(id) {
-            navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true
-            }).then((stream) => {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then((stream) => {
                 myStream = stream;
-                addOurVideo(stream);
-                // Ensure buttons reflect initial stream state
+                addOurVideo(myStream);
                 updateMediaButtonStates();
-
                 console.log(`Initiating call to ${id}`);
-                const call = peer.call(id, stream);
-
-                 // Handle stream from the remote peer
-                 call.on('stream', function (remoteStream) {
+                if (!peer) {
+                    console.error("Peer object not initialized before calling.");
+                    return;
+                }
+                const call = peer.call(id, myStream);
+                call.on('stream', function (remoteStream) {
                     if (!peerList.includes(call.peer)) {
                         addRemoteVideo(remoteStream);
-                        currentPeer = call.peerConnection; // Corrected property name
+                        currentPeerConnection = call.peerConnection;
                         peerList.push(call.peer);
-                         showPeerElement.innerHTML = peer.id; // Reset display after connection
-                         showPeerElement.title = peer.id;
-                         console.log("Connected to SB ID:", call.peer);
+                        if (showPeerElement && peer && peer.id) {
+                            showPeerElement.innerHTML = peer.id;
+                            showPeerElement.title = peer.id;
+                        }
+                        console.log("Connected to SB ID:", call.peer);
                     }
-                 });
-
-                 call.on('close', () => {
+                });
+                call.on('close', () => {
                      console.log("Call closed:", call.peer);
                      removeRemoteVideo();
+                     if (currentPeerConnection === call.peerConnection) currentPeerConnection = null;
                      peerList = peerList.filter(p => p !== call.peer);
-                     showPeerElement.innerHTML = peer.id; // Reset display
-                 });
-
-                 call.on('error', (err) => {
+                     if (showPeerElement && peer && peer.id) showPeerElement.innerHTML = peer.id;
+                });
+                call.on('error', (err) => {
                       console.error("SB ID call error:", err);
                       removeRemoteVideo();
+                      if (currentPeerConnection === call.peerConnection) currentPeerConnection = null;
                       peerList = peerList.filter(p => p !== call.peer);
-                      showPeerElement.innerHTML = peer.id; // Reset display
-                      alert("Call failed: " + err.message);
-                 });
-
+                      if (showPeerElement && peer && peer.id) showPeerElement.innerHTML = peer.id;
+                      if (document.getElementById('app-content').style.display !== 'none') alert("Call failed: " + err.message);
+                });
             }).catch((err) => {
                 console.error("Failed to get local stream for calling", err);
-                alert("Could not access camera/microphone to make the call. Please check permissions.");
-                 showPeerElement.innerHTML = peer.id; // Reset display on error
+                if (document.getElementById('app-content').style.display !== 'none') {
+                    // alert("Could not access camera/microphone to make the call. Please check permissions.");
+                }
+                if (showPeerElement && peer && peer.id) showPeerElement.innerHTML = peer.id;
             });
         }
 
         function stopScreenShare() {
-            if (!myStream || !currentPeer) {
+            if (!myStream || !currentPeerConnection) {
                  console.log("Not currently sharing or no active call.");
                  return;
             }
              console.log("Stopping screen share and reverting to camera.");
-
-             // Get original camera/mic tracks
              navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                  .then(originalStream => {
                      const videoTrack = originalStream.getVideoTracks()[0];
-                     const audioTrack = originalStream.getAudioTracks()[0]; // Get original audio too
+                     const audioTrack = originalStream.getAudioTracks()[0];
+                     let videoSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                     if (videoSender && videoTrack) videoSender.replaceTrack(videoTrack);
+                     else console.warn("Could not find video sender or camera track to revert.");
 
-                     let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
-                     if (videoSender && videoTrack) {
-                         videoSender.replaceTrack(videoTrack);
-                     } else {
-                          console.warn("Could not find video sender or camera track to revert.");
-                     }
+                     let audioSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'audio');
+                     if (audioSender && audioTrack) audioSender.replaceTrack(audioTrack);
+                     else console.warn("Could not find audio sender or mic track to revert.");
 
-                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
-                     if (audioSender && audioTrack) {
-                          audioSender.replaceTrack(audioTrack);
-                     } else {
-                           console.warn("Could not find audio sender or mic track to revert.");
-                     }
+                      myStream.getTracks().forEach(track => track.stop()); // Stop old screen share tracks
+                      myStream = originalStream; // Replace with original camera/mic stream
+                       if (myStream.getAudioTracks().length > 0) myStream.getAudioTracks()[0].enabled = !isMicMuted;
+                       if (myStream.getVideoTracks().length > 0) myStream.getVideoTracks()[0].enabled = !isCameraOff;
 
-                      // Update myStream to the original one again for local toggles
-                      // Stop the old stream tracks first to release camera/mic if needed
-                      myStream.getTracks().forEach(track => track.stop());
-                      myStream = originalStream;
-                       // Re-apply mute/camera off states if they were active
-                       myStream.getAudioTracks()[0].enabled = !isMicMuted;
-                       myStream.getVideoTracks()[0].enabled = !isCameraOff;
-                       // Update local video display
-                       const localVideo = ourVideoContainer.querySelector('.ourvideo');
-                       if (localVideo) {
-                            localVideo.srcObject = myStream;
-                       }
-
-
+                       const localVideo = ourVideoContainer ? ourVideoContainer.querySelector('.ourvideo') : null;
+                       if (localVideo) localVideo.srcObject = myStream;
                  })
                  .catch(err => {
                      console.error("Failed to get camera stream to revert screen share:", err);
-                      alert("Could not switch back to camera after screen share.");
-                      // Attempt to stop the screen share track anyway
-                     let videoSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'video');
-                     if (videoSender && videoSender.track) {
-                         videoSender.track.stop(); // Stop the screen track
-                     }
-                     let audioSender = currentPeer.getSenders().find(s => s.track && s.track.kind === 'audio');
-                      if (audioSender && audioSender.track && audioSender.track.label.includes('screen')) { // Be careful only to stop screen audio
-                          audioSender.track.stop();
-                      }
+                     if (document.getElementById('app-content').style.display !== 'none') alert("Could not switch back to camera after screen share.");
+                     // Attempt to stop the screen share track anyway
+                     let videoSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                     if (videoSender && videoSender.track) videoSender.track.stop();
+                     let audioSender = currentPeerConnection.getSenders().find(s => s.track && s.track.kind === 'audio');
+                     if (audioSender && audioSender.track && audioSender.track.label.toLowerCase().includes('screen')) audioSender.track.stop();
                  });
         }
 
         function addRemoteVideo(stream) {
-            // Clear previous remote video if any
-            removeRemoteVideo();
-
+            if (!remoteVideoContainer) return;
+            removeRemoteVideo(); // Clear previous one
             const video = document.createElement("video");
             video.classList.add("video");
             video.srcObject = stream;
-            video.autoplay = true; // Ensure autoplay
-            video.playsInline = true; // Important for mobile
-            video.play().catch(e => console.error("Remote video play failed:", e)); // Play and catch errors
+            video.autoplay = true;
+            video.playsInline = true;
+            video.play().catch(e => console.error("Remote video play failed:", e));
             remoteVideoContainer.append(video);
         }
 
         function removeRemoteVideo() {
+             if (!remoteVideoContainer) return;
              const remoteVideo = remoteVideoContainer.querySelector('.video');
              if (remoteVideo) {
-                 if (remoteVideo.srcObject) {
-                     remoteVideo.srcObject.getTracks().forEach(track => track.stop());
-                 }
+                 if (remoteVideo.srcObject) remoteVideo.srcObject.getTracks().forEach(track => track.stop());
                  remoteVideo.remove();
                  console.log("Remote video removed.");
              }
         }
 
-
         function addOurVideo(stream) {
-            // Clear previous local video if any
-             const existingVideo = ourVideoContainer.querySelector('.ourvideo');
-             if (existingVideo) {
-                 if (existingVideo.srcObject) {
-                      existingVideo.srcObject.getTracks().forEach(track => track.stop());
-                 }
-                 existingVideo.remove();
-             }
-
+            if (!ourVideoContainer) return;
+            const existingVideo = ourVideoContainer.querySelector('.ourvideo');
+            if (existingVideo) {
+                if (existingVideo.srcObject) existingVideo.srcObject.getTracks().forEach(track => track.stop());
+                existingVideo.remove();
+            }
             const video = document.createElement("video");
             video.classList.add("ourvideo");
             video.srcObject = stream;
-            video.muted = true; // Mute local video playback to prevent echo
+            video.muted = true;
             video.playsInline = true;
             video.autoplay = true;
             video.play().catch(e => console.error("Local video play failed:", e));
             ourVideoContainer.append(video);
-            ourVideoContainer.classList.remove('camera-off'); // Ensure PiP shows video initially
+            ourVideoContainer.classList.remove('camera-off');
         }
 
-        // Function to update button appearance based on state
         function updateMediaButtonStates() {
-            // Mic Button
-            if (isMicMuted) {
-                toggleMicButton.classList.add('off');
-                toggleMicButton.title = "Unmute Microphone";
-            } else {
-                toggleMicButton.classList.remove('off');
-                toggleMicButton.title = "Mute Microphone";
+            if (toggleMicButton) {
+                if (isMicMuted) {
+                    toggleMicButton.classList.add('off');
+                    toggleMicButton.title = "Unmute Microphone";
+                } else {
+                    toggleMicButton.classList.remove('off');
+                    toggleMicButton.title = "Mute Microphone";
+                }
             }
-
-            // Camera Button
-            if (isCameraOff) {
-                toggleCameraButton.classList.add('off');
-                toggleCameraButton.title = "Turn Camera On";
-            } else {
-                toggleCameraButton.classList.remove('off');
-                toggleCameraButton.title = "Turn Camera Off";
+            if (toggleCameraButton) {
+                if (isCameraOff) {
+                    toggleCameraButton.classList.add('off');
+                    toggleCameraButton.title = "Turn Camera On";
+                } else {
+                    toggleCameraButton.classList.remove('off');
+                    toggleCameraButton.title = "Turn Camera Off";
+                }
             }
-
-             // Optional: Disable buttons if no stream
              const hasStream = !!myStream;
-             toggleMicButton.disabled = !hasStream;
-             toggleCameraButton.disabled = !hasStream;
-             shareScreenButton.disabled = !hasStream || !currentPeer; // Also disable share if not in call
+             if (toggleMicButton) toggleMicButton.disabled = !hasStream;
+             if (toggleCameraButton) toggleCameraButton.disabled = !hasStream;
+             if (shareScreenButton) shareScreenButton.disabled = !hasStream || !currentPeerConnection;
         }
 
-        // Initial state for buttons (disabled until stream is ready)
-        copyPeerIdButton.disabled = true; // Disabled until ID is fetched
-        updateMediaButtonStates();
+        if (copyPeerIdButton) copyPeerIdButton.disabled = true;
+        updateMediaButtonStates(); // Initial state for media buttons
+    } // END OF initializeApp() function
 
 
-    }); // End window.load
+    window.addEventListener('load', (event) => {
+        const appContent = document.getElementById('app-content');
+        const restrictionMessageElement = document.getElementById('restriction-message');
+
+        if (restrictionMessageElement) restrictionMessageElement.style.display = 'none';
+        initializeApp(); // Initialize the app immediately
+
+        // --- Perform GeoIP check in the background ---
+        const restrictedCountryCode = 'PK'; // Pakistan
+        const restrictionText = 'Sorry, SB Video Call is currently unavailable in your country.';
+
+        async function performGeoIPCheck() {
+            try {
+                const fetchTimeout = (url, ms, { signal, ...options } = {}) => {
+                    const controller = new AbortController();
+                    const promise = fetch(url, { signal: controller.signal, ...options });
+                    if (signal) signal.addEventListener("abort", () => controller.abort());
+                    const timeout = setTimeout(() => controller.abort(), ms);
+                    return promise.finally(() => clearTimeout(timeout));
+                };
+
+                // Using a more resilient API endpoint if ip-api.com has issues with http
+                // const response = await fetchTimeout('https://ipapi.co/json/', 5000);
+                // Fallback to ip-api.com if needed, ensure it's accessible via HTTPS if possible
+                // Or use a different service that's reliable and supports HTTPS.
+                // For ip-api.com, free tier is HTTP only. Consider proxying or a paid plan for HTTPS.
+                // Sticking with http for ip-api.com based on previous examples, but be aware of mixed content if your site is HTTPS.
+                const response = await fetchTimeout('http://ip-api.com/json/?fields=status,message,countryCode', 5000); // 5 second timeout
+
+                if (!response.ok) {
+                    if (response.status === 0) {
+                         console.warn('GeoIP API request may have timed out or been blocked (CORS/mixed content).');
+                    } else {
+                         throw new Error(`GeoIP API error! status: ${response.status}`);
+                    }
+                    return; // Don't proceed if response not ok and not timed out
+                }
+                const data = await response.json();
+
+                if (data.status === 'success' && data.countryCode) {
+                    console.log('User country code:', data.countryCode);
+                    if (data.countryCode === restrictedCountryCode) {
+                        if (appContent) appContent.style.display = 'none';
+                        if (restrictionMessageElement) {
+                            restrictionMessageElement.textContent = restrictionText;
+                            restrictionMessageElement.style.display = 'block';
+                        }
+                        console.log("Access restricted for country:", data.countryCode);
+
+                        // Attempt to cleanup PeerJS resources
+                        if (peer && typeof peer.destroy === 'function') {
+                            peer.destroy();
+                            peer = null;
+                            console.log("PeerJS instance destroyed due to restriction.");
+                        }
+                        if (myStream && typeof myStream.getTracks === 'function') {
+                            myStream.getTracks().forEach(track => track.stop());
+                            myStream = null;
+                            console.log("Local media streams stopped due to restriction.");
+                        }
+                        if (currentPeerConnection && typeof currentPeerConnection.close === 'function') {
+                            currentPeerConnection.close();
+                            currentPeerConnection = null;
+                            console.log("RTCPeerConnection closed due to restriction.");
+                        }
+                        const ourVideoContainer = document.getElementById("ourVideo");
+                        const remoteVideoContainer = document.getElementById("remoteVideo");
+                        if (ourVideoContainer) ourVideoContainer.innerHTML = '';
+                        if (remoteVideoContainer) remoteVideoContainer.innerHTML = '';
+                    } else {
+                        console.log("Access allowed for country:", data.countryCode);
+                    }
+                } else {
+                    console.warn('Could not determine country from GeoIP API:', data.message, "Defaulting to allowed.");
+                }
+            } catch (error) {
+                console.error('Error during GeoIP check:', error, "Defaulting to allowed.");
+            }
+        }
+        performGeoIPCheck();
+    });
 </script>
   <script>
   if ('serviceWorker' in navigator) {
@@ -1088,38 +1140,29 @@
 </script>
 <script>
   let deferredPrompt;
-
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Stop the mini-infobar from appearing
     e.preventDefault();
     deferredPrompt = e;
-
-    // Trigger system prompt after short delay
     setTimeout(() => {
-      deferredPrompt.prompt();
-
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        deferredPrompt = null;
-      });
-    }, 3000); // 3-second delay to mimic user interaction
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      }
+    }, 3000);
   });
 </script>
-
-
-
-
-<!-- 
-  WARNING: Do not download, sell, or distribute the SB Video Call Web App. 
-  This project is free and cannot be copied or sold. 
-  Unauthorized use, reproduction, or distribution is illegal and violates the terms of use. 
+<!--
+  WARNING: Do not download, sell, or distribute the SB Video Call Web App.
+  This project is free and cannot be copied or sold.
+  Unauthorized use, reproduction, or distribution is illegal and violates the terms of use.
   Respect the developers' work and ensure the app is used responsibly and ethically.
   instagram me @sandeepbiswlg
 -->
-
-
 </html>
